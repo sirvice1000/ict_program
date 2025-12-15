@@ -10,6 +10,7 @@ from gui.knowledge_tab import KnowledgeTab
 from gui.journal_tab import JournalTab
 from gui.analytics_tab import AnalyticsTab
 from gui.market_tab import MarketTab
+from gui.time_then_price import TimeThenPriceTab
 from database.db_manager import DatabaseManager
 
 class MainWindow(QMainWindow):
@@ -40,11 +41,13 @@ class MainWindow(QMainWindow):
         self.tabs.setDocumentMode(True)
         
         # Create tabs
+        self.time_then_price_tab = TimeThenPriceTab(self.db)
         self.market_tab = MarketTab(self.db)
         self.knowledge_tab = KnowledgeTab(self.db)
         self.journal_tab = JournalTab(self.db)
         self.analytics_tab = AnalyticsTab(self.db)
         
+        self.tabs.addTab(self.time_then_price_tab, "⏰ Time Then Price")
         self.tabs.addTab(self.market_tab, "📊 Market Data")
         self.tabs.addTab(self.knowledge_tab, "📚 Knowledge Base")
         self.tabs.addTab(self.journal_tab, "📝 Trade Journal")
@@ -98,7 +101,7 @@ class MainWindow(QMainWindow):
         layout.addStretch()
         
         # Version label
-        version_label = QLabel("v1.1.0")
+        version_label = QLabel("v1.2.0")
         version_label.setStyleSheet("color: #64748b; font-size: 12px;")
         layout.addWidget(version_label)
         
@@ -106,15 +109,15 @@ class MainWindow(QMainWindow):
     
     def on_tab_changed(self, index):
         """Handle tab change"""
-        tab_names = ["Market Data", "Knowledge Base", "Trade Journal", "Analytics"]
+        tab_names = ["Time Then Price", "Market Data", "Knowledge Base", "Trade Journal", "Analytics"]
         if index < len(tab_names):
             self.status_bar.showMessage(f"Viewing: {tab_names[index]}")
             
             # Refresh analytics when switching to it
-            if index == 3:
+            if index == 4:
                 self.analytics_tab.refresh_data()
             # Refresh market data when switching to it
-            elif index == 0:
+            elif index == 1:
                 self.market_tab.load_todays_data()
     
     def apply_dark_theme(self):

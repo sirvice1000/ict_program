@@ -3,9 +3,8 @@ Database Manager - Handles all SQLite operations
 """
 
 import sqlite3
-import os
 from datetime import datetime
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional
 
 class DatabaseManager:
     def __init__(self, db_path: str = "trading_data.db"):

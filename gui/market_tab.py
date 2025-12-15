@@ -1,5 +1,6 @@
 """
 Market Analysis Tab - Circuit Breakers, CME Data, and Daily Tracking
+NOW WITH DAILY BIAS CALCULATOR BUTTON
 """
 
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
@@ -8,6 +9,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
 from PyQt6.QtCore import Qt, QDate
 from PyQt6.QtGui import QDoubleValidator, QFont
 from database.db_manager import DatabaseManager
+from gui.bias_calculator import DailyBiasCalculator
 import webbrowser
 
 class MarketTab(QWidget):
@@ -36,9 +38,28 @@ class MarketTab(QWidget):
         
         header_layout.addStretch()
         
+        # Daily Bias Calculator button (NEW!)
+        bias_calc_btn = QPushButton("🎯 Daily Bias Calculator")
+        bias_calc_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #8b5cf6;
+                color: white;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 10px 20px;
+                border-radius: 6px;
+            }
+            QPushButton:hover {
+                background-color: #7c3aed;
+            }
+        """)
+        bias_calc_btn.clicked.connect(self.open_bias_calculator)
+        bias_calc_btn.setToolTip("Open comprehensive daily bias checklist")
+        header_layout.addWidget(bias_calc_btn)
+        
         # Date selector
         date_label = QLabel("Date:")
-        date_label.setStyleSheet("font-size: 14px; font-weight: 500;")
+        date_label.setStyleSheet("font-size: 14px; font-weight: 500; margin-left: 10px;")
         header_layout.addWidget(date_label)
         
         self.date_input = QDateEdit()
@@ -63,6 +84,11 @@ class MarketTab(QWidget):
         
         splitter.setSizes([700, 400])
         layout.addWidget(splitter)
+    
+    def open_bias_calculator(self):
+        """Open the Daily Bias Calculator dialog"""
+        dialog = DailyBiasCalculator(self)
+        dialog.exec()
         
     def create_your_assets_panel(self):
         """Create panel for your 9 main trading assets"""
